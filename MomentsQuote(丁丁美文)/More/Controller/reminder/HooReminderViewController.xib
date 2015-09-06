@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HooReminderViewController">
+            <connections>
+                <outlet property="dataPicker" destination="pN1-xF-tcA" id="y62-Fx-6sr"/>
+                <outlet property="reminderLabel" destination="pzj-YK-sWg" id="gH8-D8-5ch"/>
+                <outlet property="reminderSwitch" destination="Dsj-oO-Ag1" id="w3i-by-IYt"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="提醒开关" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Blq-QC-Gqj">
+                    <rect key="frame" x="0.0" y="60" width="600" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dsj-oO-Ag1">
+                    <rect key="frame" x="276" y="106" width="51" height="31"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="49" id="uIt-vl-fHZ"/>
+                        <constraint firstAttribute="height" constant="31" id="xQa-8b-zNB"/>
+                    </constraints>
+                    <connections>
+                        <action selector="timeSwitch:" destination="-1" eventType="valueChanged" id="rgg-4f-Cbq"/>
+                    </connections>
+                </switch>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="设置提醒时间" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pzj-YK-sWg">
+                    <rect key="frame" x="0.0" y="195" width="600" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="pN1-xF-tcA">
+                    <rect key="frame" x="0.0" y="266" width="600" height="162"/>
+                    <date key="date" timeIntervalSinceReferenceDate="460743815.188604">
+                        <!--2015-08-08 16:23:35 +0000-->
+                    </date>
+                    <locale key="locale" localeIdentifier="zh_CN"/>
+                </datePicker>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="pzj-YK-sWg" firstAttribute="top" secondItem="Dsj-oO-Ag1" secondAttribute="bottom" constant="58" id="Hkd-rK-U5k"/>
+                <constraint firstAttribute="trailing" secondItem="pN1-xF-tcA" secondAttribute="trailing" id="IBI-X3-YhO"/>
+                <constraint firstItem="Blq-QC-Gqj" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="MCM-XB-MJb"/>
+                <constraint firstItem="pN1-xF-tcA" firstAttribute="top" secondItem="pzj-YK-sWg" secondAttribute="bottom" constant="50" id="SkP-ec-HhQ"/>
+                <constraint firstAttribute="trailing" secondItem="Blq-QC-Gqj" secondAttribute="trailing" id="ToI-ox-Gxw"/>
+                <constraint firstAttribute="trailing" secondItem="pzj-YK-sWg" secondAttribute="trailing" id="Ve9-cg-fSQ"/>
+                <constraint firstItem="Blq-QC-Gqj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="60" id="orz-ML-g56"/>
+                <constraint firstItem="pzj-YK-sWg" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="qf7-sa-xl5"/>
+                <constraint firstAttribute="centerX" secondItem="Dsj-oO-Ag1" secondAttribute="centerX" id="qse-Zx-5l9"/>
+                <constraint firstItem="Dsj-oO-Ag1" firstAttribute="top" secondItem="Blq-QC-Gqj" secondAttribute="bottom" constant="25" id="rJr-eN-v3e"/>
+                <constraint firstItem="pN1-xF-tcA" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="raB-fT-Hcg"/>
+            </constraints>
+        </view>
+    </objects>
+</document>

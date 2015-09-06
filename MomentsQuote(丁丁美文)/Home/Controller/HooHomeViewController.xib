@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HooHomeViewController">
+            <connections>
+                <outlet property="imageView" destination="urk-im-B2q" id="Oin-dD-aUj"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="10371_mini.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="urk-im-B2q">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="urk-im-B2q" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="SgQ-fd-uos"/>
+                <constraint firstAttribute="bottom" secondItem="urk-im-B2q" secondAttribute="bottom" id="WDk-Kf-lJg"/>
+                <constraint firstAttribute="trailing" secondItem="urk-im-B2q" secondAttribute="trailing" id="cjA-nt-AOj"/>
+                <constraint firstItem="urk-im-B2q" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="hL2-G8-xp8"/>
+            </constraints>
+        </view>
+    </objects>
+    <resources>
+        <image name="10371_mini.jpg" width="1024" height="617"/>
+    </resources>
+</document>

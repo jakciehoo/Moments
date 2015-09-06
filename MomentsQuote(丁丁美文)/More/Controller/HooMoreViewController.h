@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HooBaseTableViewController.h"
 
-@interface HooMoreViewController : UITableViewController
+@interface HooMoreViewController : HooBaseTableViewController
 
 @end

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="gTV-IL-0wX" customClass="HooQuotesCell">
+            <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9vX-Pi-WEy">
+                        <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XDN-Fh-NSE" customClass="HooInsetsLabel">
+                        <rect key="frame" x="0.0" y="118" width="150" height="32"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="32" id="Lbs-mx-ezj"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TtD-rt-kdx">
+                        <rect key="frame" x="105" y="5" width="40" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="40" id="9y6-VJ-8Tp"/>
+                            <constraint firstAttribute="height" constant="40" id="wbF-xn-iRT"/>
+                        </constraints>
+                        <state key="normal" image="star_small_off">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <state key="selected" image="star_small_on"/>
+                        <connections>
+                            <action selector="starFavi:" destination="gTV-IL-0wX" eventType="touchUpInside" id="R3o-LO-TEh"/>
+                        </connections>
+                    </button>
+                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="K6J-Te-og1">
+                        <rect key="frame" x="57" y="56" width="37" height="37"/>
+                    </activityIndicatorView>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <constraints>
+                <constraint firstAttribute="centerY" secondItem="K6J-Te-og1" secondAttribute="centerY" id="0tK-Uy-I5K"/>
+                <constraint firstItem="TtD-rt-kdx" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="48d-hN-q0j"/>
+                <constraint firstAttribute="centerX" secondItem="K6J-Te-og1" secondAttribute="centerX" id="CDS-qm-nNn"/>
+                <constraint firstAttribute="trailing" secondItem="XDN-Fh-NSE" secondAttribute="trailing" id="MmU-Pw-vla"/>
+                <constraint firstAttribute="bottom" secondItem="9vX-Pi-WEy" secondAttribute="bottom" id="TEu-0k-u6p"/>
+                <constraint firstAttribute="trailing" secondItem="TtD-rt-kdx" secondAttribute="trailing" constant="5" id="tTn-X9-aij"/>
+                <constraint firstItem="9vX-Pi-WEy" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="uK3-cC-1Td"/>
+                <constraint firstItem="9vX-Pi-WEy" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="uky-vj-rRj"/>
+                <constraint firstAttribute="trailing" secondItem="9vX-Pi-WEy" secondAttribute="trailing" id="xEy-hz-S2y"/>
+                <constraint firstAttribute="bottom" secondItem="XDN-Fh-NSE" secondAttribute="bottom" id="yto-Lp-DYu"/>
+                <constraint firstItem="XDN-Fh-NSE" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="zUI-zU-BHG"/>
+            </constraints>
+            <connections>
+                <outlet property="cellImageView" destination="9vX-Pi-WEy" id="gdI-b3-UDG"/>
+                <outlet property="cellQuotesLabel" destination="XDN-Fh-NSE" id="PrF-iR-rD4"/>
+                <outlet property="indicator" destination="K6J-Te-og1" id="I93-Bi-YSH"/>
+                <outlet property="starButton" destination="TtD-rt-kdx" id="I4L-uP-jOt"/>
+            </connections>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="star_small_off" width="40" height="40"/>
+        <image name="star_small_on" width="40" height="40"/>
+    </resources>
+</document>

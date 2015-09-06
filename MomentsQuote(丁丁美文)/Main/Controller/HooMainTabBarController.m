@@ -13,128 +13,175 @@
 #import "HooMomentsViewController.h"
 #import "HooMoreViewController.h"
 #import "HooMainNavigationController.h"
+#import "HooTabBar.h"
+#import "HooFlowerButton.h"
 
-@interface HooMainTabBarController ()
+@interface HooMainTabBarController ()<HooTabBarDelegate,UINavigationControllerDelegate>
+{
+    BOOL tabBarIsShow;
+}
 
-@property (nonatomic, strong) UIColor *centerButtonColor;
-@property (nonatomic, weak) UIView *hooTabBar;
-@property (nonatomic, weak) UIButton *centerButton;
+@property (nonatomic, strong) NSMutableArray *items;
+/**
+ *  自定义的HooTabBar
+ */
+@property (nonatomic, weak) HooTabBar *hooTabBar;
+
+
+@property (weak, nonatomic) HooHomeViewController *home;
+
+@property (weak, nonatomic) NSLayoutConstraint *tabBarbottomConstraint;
 
 @end
 
 @implementation HooMainTabBarController
 
 #pragma mark - 懒加载
-
-//中心按钮的颜色
-- (UIColor *)centerButtonColor
+- (NSMutableArray *)items
 {
-    if (_centerButtonColor == nil) {
-        _centerButtonColor = [UIColor grayColor];
+    if (_items == nil) {
+        _items = [NSMutableArray array];
     }
-    return _centerButtonColor;
-}
-//懒加载初始化中心按钮并添加到view上
-- (UIButton *)centerButton
-{
-    if (_centerButton == nil) {
-        UIButton *centerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        centerButton.backgroundColor = self.centerButtonColor;
-        centerButton.layer.cornerRadius = 40;
-        centerButton.layer.borderColor = [UIColor whiteColor].CGColor;
-        centerButton.layer.borderWidth = 1.0;
-        centerButton.showsTouchWhenHighlighted = YES;
-        //添加在view上
-        [self.view addSubview:centerButton];
-        _centerButton = centerButton;
-        [self setupCenterButtonConstraint];
-    }
-    return _centerButton;
-}
-//设置中心tabBar按钮的约束
-- (void)setupCenterButtonConstraint
-{
-    _centerButton.translatesAutoresizingMaskIntoConstraints = NO;
-    //宽高约束
-    [_centerButton addConstraints:@[
-                            [NSLayoutConstraint constraintWithItem:_centerButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:80],
-                            [NSLayoutConstraint constraintWithItem:_centerButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:80],
-                            ]];
-    
-    //与父控件水平对齐 底部距离为18
-    [self.view addConstraints:@[
-                                
-                                //view1 constraints
-                                [NSLayoutConstraint constraintWithItem:_centerButton
-                                                             attribute:NSLayoutAttributeCenterX
-                                                             relatedBy:NSLayoutRelationEqual
-                                                                toItem:self.view
-                                                             attribute:NSLayoutAttributeCenterX
-                                                            multiplier:1.0
-                                                              constant:0],
-                                
-                                [NSLayoutConstraint constraintWithItem:_centerButton
-                                                             attribute:NSLayoutAttributeBottom
-                                                             relatedBy:NSLayoutRelationEqual
-                                                                toItem:self.view
-                                                             attribute:NSLayoutAttributeBottom
-                                                            multiplier:1.0
-                                                              constant:18],
-                                
-                                
-                                ]];
-    
+    return _items;
 }
 
+
+#pragma mark - view初始化方法
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.tabBar.tintColor = HooColor(38, 86, 134);
-    //调用centerButton并初始化，添加事件
-    [self.centerButton addTarget:self action:@selector(centerBtnClicked) forControlEvents:UIControlEventTouchDown];
+
     //添加子控件
     [self setupAllChildViewController];
+    // 自定义tabBar
+    HooTabBar *tabBar = [[HooTabBar alloc] initWithFrame:self.tabBar.bounds];
+    tabBar.tintColor = HooTintColor;
+    tabBar.items = self.items;
+    tabBar.delegate = self;
+    [self.view addSubview:tabBar];
+    
+    [tabBar autoPinEdgeToSuperviewEdge:ALEdgeLeft withInset:0];
+    [tabBar autoPinEdgeToSuperviewEdge:ALEdgeRight withInset:0];
+    NSLayoutConstraint *tabBarbottomConstraint = [tabBar autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:0];
+    self.tabBarbottomConstraint = tabBarbottomConstraint;
+    
+    [tabBar autoSetDimension:ALDimensionHeight toSize:49];
+    self.hooTabBar = tabBar;
+    //传值
+    self.home.centerButton = self.hooTabBar.centerButton;
+
+    
+    [self.tabBar removeFromSuperview];
+    
     
 }
-- (void)centerBtnClicked
+- (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     self.selectedIndex = 2;
+
 }
 
+- (void)showOrHideTabBar
+{
+    if (self.hooTabBar.centerButton.currentState == HooFlowerButtonsStateOpened) {
+        [self.view removeConstraint:_tabBarbottomConstraint];
+        
+        _tabBarbottomConstraint = [self.hooTabBar autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:-50];
+        [UIView animateWithDuration:1.0 animations:^{
+            
+            [self.view layoutIfNeeded];
+            
+        }];
+    }else{
+        [self.view removeConstraint:_tabBarbottomConstraint];
+        
+        _tabBarbottomConstraint = [self.hooTabBar autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:0];
+        [UIView animateWithDuration:1.0 animations:^{
+            
+            [self.view layoutIfNeeded];
+            
+        }];
+    }
+
+}
 
 #pragma mark - 添加子控制器
 - (void)setupAllChildViewController
 {
     //创作海报
     HooPosterViewController *poster = [[HooPosterViewController alloc] init];
-    [self addChildVc:poster withImageName:@"tb_poster_flat" title:@"DIY"];
+    [self addChildVc:poster withImageName:@"tb_poster_flat" title:@"创作"];
+    
     HooQuotesViewController *quotes = [[HooQuotesViewController alloc] init];
-    [self addChildVc:quotes withImageName:@"tb_grid_flat" title:@"美文"];
+    [self addChildVc:quotes withImageName:@"tb_grid_flat" title:@"丁丁美文"];
     
     HooHomeViewController *home = [[HooHomeViewController alloc] init];
     [self addChildVc:home withImageName:nil title:nil];
+    _home = home;
+    
+    
     
     HooMomentsViewController *Moments = [[HooMomentsViewController alloc] init];
-    [self addChildVc:Moments withImageName:@"tb_pinterest" title:@"丁丁"];
+    [self addChildVc:Moments withImageName:@"tb_talk_flat" title:@"美图"];
     
     HooMoreViewController *profile = [[HooMoreViewController alloc] init];
     [self addChildVc:profile withImageName:@"tb_more_flat" title:@"更多"];
     
 }
-
 - (void)addChildVc:(UIViewController *)childVc withImageName:(NSString *)imageName title:(NSString *)title
 {
-    if (title) {
-        
-        childVc.title = title;
-    }
+    childVc.tabBarItem.title = title;
+
     if (imageName) {
         
-        childVc.tabBarItem.image = [UIImage imageNamed:imageName];
+        UIImage *image = [UIImage imageNamed:imageName];
+        childVc.tabBarItem.image = image;
+        //根据tintColor设置按钮的选中时的图片
+        childVc.tabBarItem.selectedImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
     
+    [self.items addObject:childVc.tabBarItem];
+    
     HooMainNavigationController *navi = [[HooMainNavigationController alloc] initWithRootViewController:childVc];
+    navi.delegate = self;
     [self addChildViewController:navi];
 }
+
+#pragma mark - HooTabBarDelegate
+
+- (void)tabBar:(HooTabBar *)tabBar didClickButton:(NSInteger)index
+{
+    self.selectedIndex = index;
+}
+
+
+#pragma mark - UINavigationControllerDelegate 这里我们用来当 push的时候的隐藏tabBar动画
+
+- (void)navigationController:(UINavigationController *)navController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if (viewController.hidesBottomBarWhenPushed)
+    {   //隐藏，向左移动
+        if (!tabBarIsShow) return;
+
+         [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                                        self.hooTabBar.transform = CGAffineTransformMakeTranslation(-self.hooTabBar.width * 2, 0);
+        } completion:^(BOOL finished) {
+            tabBarIsShow = NO;
+        }];
+    }
+    else
+    {
+        //显示，向右还原
+        if (tabBarIsShow) return;
+        [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                             self.hooTabBar.transform = CGAffineTransformIdentity;
+                         } completion:^(BOOL finished) {
+                             tabBarIsShow = YES;
+                         }];
+    }
+    
+}
+
 
 @end

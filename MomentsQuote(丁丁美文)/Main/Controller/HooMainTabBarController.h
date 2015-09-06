@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+@class HooTabBar;
 
 @interface HooMainTabBarController : UITabBarController
 
+
+- (void)showOrHideTabBar;
 @end

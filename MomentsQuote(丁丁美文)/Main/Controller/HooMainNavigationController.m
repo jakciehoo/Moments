@@ -7,6 +7,8 @@
 //
 
 #import "HooMainNavigationController.h"
+#import "HooMainTabBarController.h"
+#import "HooTabBar.h"
 
 @interface HooMainNavigationController ()
 
@@ -17,6 +19,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.navigationBar.tintColor = HooColor(38, 86, 134);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -24,14 +27,17 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    [super pushViewController:viewController animated:animated];
+    if (self.viewControllers.count > 1) {
+        
+        viewController.hidesBottomBarWhenPushed = YES;
+    }
 }
-*/
+
+
+
 
 @end

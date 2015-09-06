@@ -7,6 +7,8 @@
 //
 
 #import "HooMomentsViewController.h"
+#import "HooJSONTool.h"
+#import "HooMoment.h"
 
 @interface HooMomentsViewController ()
 
@@ -35,8 +37,11 @@ static NSString * const reuseIdentifier = @"Cell";
     
     // Register cell classes
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+
     
     // Do any additional setup after loading the view.
+    
+
 }
 
 - (void)didReceiveMemoryWarning {

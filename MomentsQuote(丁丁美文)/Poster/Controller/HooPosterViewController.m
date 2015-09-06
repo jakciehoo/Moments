@@ -2,26 +2,56 @@
 //  HooPosterViewController.m
 //  MomentsQuote(丁丁美文)
 //
-//  Created by HooJackie on 15/8/3.
+//  Created by HooJackie on 15/8/13.
 //  Copyright (c) 2015年 jackieHoo. All rights reserved.
 //
 
 #import "HooPosterViewController.h"
+#import "HooMainNavigationController.h"
+#import "HooCreateViewController.h"
+#import "HooPosterCell.h"
+#import "HooCreateCell.h"
 
 @interface HooPosterViewController ()
+
+@property (nonatomic, strong) NSMutableArray *postList;
+@property (nonatomic, strong) NSMutableArray *createList;
+@property (nonatomic, strong) NSDateFormatter *formatter;
 
 @end
 
 @implementation HooPosterViewController
 
+static NSString *ID = @"cell";
+
+- (NSMutableArray *)postList
+{
+    if (_postList == nil) {
+        _postList = [NSMutableArray array];
+    }
+    return _postList;
+}
+
+- (NSMutableArray *)createList
+{
+    if (_createList == nil) {
+        _createList = [NSMutableArray array];
+        [_createList addObject:@"动手创作 >>"];
+        [_createList addObject:@"懒人方法 >>"];
+    }
+    return _createList;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"创作";
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -32,69 +62,45 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
+
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
+    return 2;
 }
 
-/*
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 44;
+}
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    
+    HooCreateCell *cell;
+        cell = [tableView dequeueReusableCellWithIdentifier:ID];
+
+        
+        if (cell == nil) {
+            cell = [[[NSBundle mainBundle] loadNibNamed:@"HooCreateCell" owner:nil options:nil] lastObject];
+        }
+    cell.createLabel.text = self.createList[indexPath.row];
     
     // Configure the cell...
-    
     return cell;
-}
-*/
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.row == 0 || indexPath.row == 1) {
+        HooCreateViewController *createCtrl = [[HooCreateViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        [self.navigationController pushViewController:createCtrl animated:YES];
+    }
 }
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
 
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

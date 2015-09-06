@@ -2,7 +2,7 @@
 //  HooPosterViewController.h
 //  MomentsQuote(丁丁美文)
 //
-//  Created by HooJackie on 15/8/3.
+//  Created by HooJackie on 15/8/13.
 //  Copyright (c) 2015年 jackieHoo. All rights reserved.
 //
 
