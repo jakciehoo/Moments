@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
@@ -18,13 +18,13 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="提醒开关" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Blq-QC-Gqj">
-                    <rect key="frame" x="0.0" y="60" width="600" height="21"/>
+                    <rect key="frame" x="0.0" y="120" width="600" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dsj-oO-Ag1">
-                    <rect key="frame" x="276" y="106" width="51" height="31"/>
+                    <rect key="frame" x="276" y="166" width="51" height="31"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="49" id="uIt-vl-fHZ"/>
                         <constraint firstAttribute="height" constant="31" id="xQa-8b-zNB"/>
@@ -34,13 +34,13 @@
                     </connections>
                 </switch>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="设置提醒时间" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pzj-YK-sWg">
-                    <rect key="frame" x="0.0" y="195" width="600" height="21"/>
+                    <rect key="frame" x="0.0" y="255" width="600" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="pN1-xF-tcA">
-                    <rect key="frame" x="0.0" y="266" width="600" height="162"/>
+                    <rect key="frame" x="0.0" y="326" width="600" height="162"/>
                     <date key="date" timeIntervalSinceReferenceDate="460743815.188604">
                         <!--2015-08-08 16:23:35 +0000-->
                     </date>
@@ -55,7 +55,7 @@
                 <constraint firstItem="pN1-xF-tcA" firstAttribute="top" secondItem="pzj-YK-sWg" secondAttribute="bottom" constant="50" id="SkP-ec-HhQ"/>
                 <constraint firstAttribute="trailing" secondItem="Blq-QC-Gqj" secondAttribute="trailing" id="ToI-ox-Gxw"/>
                 <constraint firstAttribute="trailing" secondItem="pzj-YK-sWg" secondAttribute="trailing" id="Ve9-cg-fSQ"/>
-                <constraint firstItem="Blq-QC-Gqj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="60" id="orz-ML-g56"/>
+                <constraint firstItem="Blq-QC-Gqj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="120" id="orz-ML-g56"/>
                 <constraint firstItem="pzj-YK-sWg" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="qf7-sa-xl5"/>
                 <constraint firstAttribute="centerX" secondItem="Dsj-oO-Ag1" secondAttribute="centerX" id="qse-Zx-5l9"/>
                 <constraint firstItem="Dsj-oO-Ag1" firstAttribute="top" secondItem="Blq-QC-Gqj" secondAttribute="bottom" constant="25" id="rJr-eN-v3e"/>

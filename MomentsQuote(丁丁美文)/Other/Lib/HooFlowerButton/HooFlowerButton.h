@@ -55,13 +55,30 @@ typedef enum {
 - (UIImage *)flowerButton:(HooFlowerButton *)flowerButton
          imageForItemAtIndex:(NSInteger)index;
 @optional
+/**
+ *  允许显示其在createOtherViewsIn:aboveView:方法中新添加的View.
+ *
+ *  @return YES  允许添加新View, NO 不允许
+ */
 - (BOOL) showOtherViews;
+/**
+ *  新增view到中心按钮的父视图
+ *
+ *  @param superView 按钮的父视图
+ *  @param blackView 蒙版
+ *
+ *  @return 返回添加的视图数组
+ */
 - (NSArray *)createOtherViewsIn:(UIView *)superView aboveView:(UIView *)blackView;
 /*! 设置按钮的样式
  */
 - (void)flowerButton:(HooFlowerButton*)optionsButton
   willDisplayButtonItem:(HooFlowerItem*)button;
-
+/**
+ *  中心按钮点击时的调用的方法
+ *
+ *  @param flowerButton 中心按钮
+ */
 - (void)flowerButtonDidClicked:(HooFlowerButton *)flowerButton;
 
 
@@ -104,7 +121,7 @@ typedef enum {
  */
 - (void)removeItemsAndBlackView;
 - (void)showOrHideSubviews;
-- (void)hideButtons;
+- (void)hideFlowerButtons;
 
 @end
 

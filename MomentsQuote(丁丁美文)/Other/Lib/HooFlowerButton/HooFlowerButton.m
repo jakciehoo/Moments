@@ -1,4 +1,5 @@
 #import "HooFlowerButton.h"
+#import "FXBlurView.h"
 
 
 @interface HooFlowerButton ()
@@ -10,12 +11,22 @@
  */
 @property (nonatomic, assign) BOOL showOtherViews;
 @property (nonatomic, strong) NSMutableArray *items;
-@property (nonatomic, strong) NSArray *viewArray;
-@property (nonatomic, strong) UIView *blackView;
+@property (nonatomic, strong) NSMutableArray *viewArray;
+@property (nonatomic, strong) FXBlurView *blackView;
 
 @end
 
 @implementation HooFlowerButton
+
+#pragma mark -  懒加载
+- (NSMutableArray *)viewArray
+{
+    if (_viewArray == nil) {
+        _viewArray = [NSMutableArray array];
+        
+    }
+    return _viewArray;
+}
 
 - (instancetype)initFlowerButtonWithView:(UIView *)superView showInView:(UIView *)containerView
 {
@@ -50,22 +61,22 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(orientationChanged:)
-                                                 name:UIDeviceOrientationDidChangeNotification
+                                                 name:UIApplicationDidChangeStatusBarOrientationNotification
                                                object:nil];
     
 }
 
 //旋转时候调用的方法
 - (void)orientationChanged:(NSNotification *)note {
-    if ([[note object] orientation] == UIDeviceOrientationUnknown ||
-        [[note object] orientation] == UIDeviceOrientationFaceUp  ||
-        [[note object] orientation] == UIDeviceOrientationFaceDown) return;
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
+        return;
+    }
 
     if(self.currentState == HooFlowerButtonsStateOpened) {
         [self buttonPressed];
     }
 }
-
 
 #pragma mark - 中心按钮按下的事件
 
@@ -112,7 +123,7 @@
         
 
         animationDelay = 0.05;
-        [self hideButtons];
+        [self hideFlowerButtons];
         [self removeBlackView];
         [self removeOtherViews];
         
@@ -138,7 +149,7 @@
     [self.containerView insertSubview:self.blackView belowSubview:self.superview];
     [UIView animateWithDuration:self.duration/2 animations:^{
         
-        self.blackView.alpha = 0.5;
+        self.blackView.alpha = 1.0;
     } completion:^(BOOL finished) {
         self.enabled = YES;
     }];
@@ -147,7 +158,10 @@
 - (UIView *)blackView {
     
     if(_blackView == nil) {
-        _blackView = [[UIView alloc] initWithFrame:self.containerView.bounds];
+        _blackView = [[FXBlurView alloc] initWithFrame:self.containerView.bounds];
+        
+        _blackView.dynamic = YES;
+        _blackView.blurRadius = 5;
         _blackView.autoresizingMask = [self allAutoresizingMasksFlags];
         [_blackView setTranslatesAutoresizingMaskIntoConstraints:YES];
         
@@ -168,6 +182,8 @@
     } completion:^(BOOL finished) {
         
         [self.blackView removeFromSuperview];
+        self.blackView = nil;
+        
         self.enabled = YES;
     }];
 }
@@ -179,7 +195,8 @@
 - (void)addOtherViews
 {
     if ([self.delegate respondsToSelector:@selector(createOtherViewsIn:aboveView:)]) {
-        self.viewArray = [self.delegate createOtherViewsIn:self.containerView aboveView:self.blackView];
+        NSArray *viewArray = [self.delegate createOtherViewsIn:self.containerView aboveView:self.blackView];
+        [self.viewArray addObjectsFromArray:viewArray];
     }
 }
 
@@ -194,8 +211,7 @@
            view.alpha = 0.0;
             
         } completion:^(BOOL finished) {
-            
-            [view removeFromSuperview];
+            [self removeViewArray];
             self.enabled = YES;
         }];
     }
@@ -204,7 +220,9 @@
 {
     for(UIView *view in self.viewArray) {
         [view removeFromSuperview];
+        
     }
+    [self.viewArray removeAllObjects];
 }
 
 #pragma  mark - 子按钮相关
@@ -291,7 +309,7 @@
     return brOptionItem;
 }
 
-- (void)hideButtons {
+- (void)hideFlowerButtons {
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:self.duration/2 animations:^{
@@ -313,6 +331,7 @@
     for(UIView *view in self.items) {
         [view removeFromSuperview];
     }
+    [self.items removeAllObjects];
 
 }
 
@@ -321,15 +340,17 @@
     // removeing the object will not animate it with others
     [self.items removeObject:button];
     [self buttonPressed];
-    
-    [self.delegate flowerButton:self didSelectItem:button];
+    if ([self.delegate respondsToSelector:@selector(flowerButton:didSelectItem:)]) {
+        
+        [self.delegate flowerButton:self didSelectItem:button];
+    }
     
     [UIView animateWithDuration:0.3 animations:^{
         [self layoutIfNeeded];
-        button.transform = CGAffineTransformMakeScale(5, 5);
+        button.transform = CGAffineTransformMakeScale(3, 3);
         button.alpha  = 0.0;
-        button.center = CGPointMake(button.center.x,
-                                    button.superview.frame.size.height / 2);
+       // button.center = CGPointMake(button.center.x,
+                                    //button.superview.frame.size.height / 2);
     } completion:^(BOOL finished) {
         [button removeFromSuperview];
     }];
@@ -345,7 +366,7 @@
         [self removeItems];
         [self removeBlackView];
         [self removeViewArray];
-        [self.items removeAllObjects];
+        
 
         _currentState = HooFlowerButtonsStateClosed;
     }

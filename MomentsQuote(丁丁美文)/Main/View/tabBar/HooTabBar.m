@@ -217,6 +217,7 @@
 - (void)dealloc
 {
     [self removeObserver:self forKeyPath:@"centerButton.selected"];
+    
 }
 
 

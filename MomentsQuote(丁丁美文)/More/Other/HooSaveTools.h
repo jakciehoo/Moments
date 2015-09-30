@@ -28,4 +28,16 @@
 + (void)setBool:(BOOL)value forKey:(NSString *)defaultName;
 + (BOOL)boolForkey:(NSString *)defaultName;
 
+/**
+ *沙盒中存取NSInteger类型数据
+ *
+ *  @param value       NSInteger类型的值
+ *  @param defaultName 名
+ */
++ (void)setInteger:(NSInteger)value forKey:(NSString *)defaultName;
++ (NSInteger)integerForkey:(NSString *)defaultName;
+
+
+
+
 @end

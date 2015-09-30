@@ -15,6 +15,9 @@
 #import "UIView+AutoLayout.h"
 //屏幕宽度
 #define HooScreenSize [UIScreen mainScreen].bounds.size
+#define HooKeyWindow [UIApplication sharedApplication].keyWindow
+//应用程序文档目录
+#define HooDocumentDirectory NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0]
 
 #define HooColor(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1.0]
 //全局颜色
@@ -26,6 +29,7 @@
 //定义保存到沙盒的时间的Key名
 #define DatePicked @"datePicked"
 #define SwitchState @"switchState"
+#define PhotoID @"PhotoID"
 
 
 #ifdef DEBUG

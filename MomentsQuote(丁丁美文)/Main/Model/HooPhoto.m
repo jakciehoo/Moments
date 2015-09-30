@@ -18,7 +18,7 @@
 
 + (NSArray *)ignoredPropertyNames
 {
-    return @[@"isFavorite"];
+    return @[@"isFavorite",@"image_filtername"];
 }
 
 + (NSDictionary *)replacedKeyFromPropertyName

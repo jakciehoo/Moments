@@ -13,7 +13,7 @@
 - (void)choosedColor:(UIColor *)color;
 - (void)choosedFont:(NSString *)fontName;
 - (void)choosedFilter:(NSString *)filterName;
-- (void)toolButtonClicked:(UIButton *)sender;
+- (void)toolButtonClicked;
 
 @end
 

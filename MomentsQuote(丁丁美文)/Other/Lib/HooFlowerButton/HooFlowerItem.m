@@ -19,9 +19,13 @@ const CGFloat kBROptionsItemDefaultItemHeight = 60;
 #pragma mark - Inits/setups
 
 - (instancetype)initWithIndex:(NSInteger)index {
-    self = [self init];
+    self = [super initWithFrame:CGRectMake(0.0,
+                                           0.0,
+                                           kBROptionsItemDefaultItemHeight,
+                                           kBROptionsItemDefaultItemHeight)];
     if(self) {
         _index = index;
+        [self LayoutTheButton];
     }
     return self;
 }
@@ -32,6 +36,7 @@ const CGFloat kBROptionsItemDefaultItemHeight = 60;
                                            kBROptionsItemDefaultItemHeight,
                                            kBROptionsItemDefaultItemHeight)];
     if(self) {
+        _index++;
         [self LayoutTheButton];
     }
     return self;

@@ -18,7 +18,8 @@
 
 +(NSArray *)ignoredPropertyNames
 {
-    return @[@"fontColorR",@"fontColorG",@"fontName",@"fontColorB",@"fontSize",@"isMine"];
+    return @[@"ID",@"fontColorR",@"fontColorG",
+             @"fontName",@"fontColorB",@"fontSize",@"show_date"];
 }
 
 +(NSDictionary *)replacedKeyFromPropertyName

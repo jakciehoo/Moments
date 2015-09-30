@@ -15,4 +15,6 @@
  *  @return float类型的数组，包含3个值依次对应为R,G,B的值
  */
 - (NSArray *)getRGBComponents;
++ (UIColor*) colorWithHex:(NSInteger)hexValue;
++ (UIColor*) colorWithHex:(NSInteger)hexValue alpha:(CGFloat)alphaValue;
 @end

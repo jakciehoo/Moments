@@ -8,6 +8,9 @@
 #import "UIImage+Utility.h"
 
 #import <Accelerate/Accelerate.h>
+#import <Photos/Photos.h>
+
+#define ImageSaveDirectory NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0]
 
 @implementation UIImage (Utility)
 
@@ -190,6 +193,20 @@
     return img;
 }
 
++ (UIImage*)crop:(UIImage *)image InRect:(CGRect)rect
+{
+    CGPoint origin = CGPointMake(-rect.origin.x, -rect.origin.y);
+    
+    
+    
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
+    [image drawAtPoint:origin];
+    __autoreleasing UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return img;
+}
+
 #pragma mark- Masking
 
 - (UIImage*)maskedImage:(UIImage*)maskImage
@@ -307,5 +324,213 @@
     
     return [UIColor colorWithRed:r green:g blue:b alpha:a];
 }
+- (instancetype)filterImagewithFilterName:(NSString *)filterName
+{
+    //给图片添加滤镜
+    CIImage *inputCIImage = [[CIImage alloc] initWithImage:self];
+    CIFilter *filter = [CIFilter filterWithName:filterName];
+    
+    [filter setValue:inputCIImage forKey:kCIInputImageKey];
+    CIImage *outputCIImage = [filter outputImage];
+    CGRect extent = [outputCIImage extent];
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CGImageRef cgImage = [context createCGImage:outputCIImage fromRect:extent];
+    UIImage *filteredImage = [UIImage imageWithCGImage:cgImage];
+    return filteredImage;
+}
++ (instancetype)getRandomImageFromPhotoLibrary:(void(^)(NSString * failAuthorizationInfo))failToAuthorization
+{
+    __block UIImage *randomImage;
+
+        //获取是否授权访问照片库
+        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+            
+            switch (status) {
+                //已授权则访问照片库，并随机获取一张照片
+                case PHAuthorizationStatusAuthorized:
+                
+                break;
+                
+                default:
+                //未授权则弹出提示
+                if (failToAuthorization) {
+                    NSString *failAuthorizationInfo = @"你还未授权程序访问照片库,请到设置里找到该应用，打开访问照片";
+                    failToAuthorization(failAuthorizationInfo);
+                }
+                
+                break;
+            }
+        }];
+    //获取是否授权访问照片库
+    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+    
+    if (status == PHAuthorizationStatusAuthorized) {
+        
+        
+        PHFetchOptions *options = [[PHFetchOptions alloc] init];
+        options.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:YES]];
+        PHFetchResult *fetchResult = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:options];
+        NSInteger randomIndex = arc4random() % fetchResult.count;
+        PHAsset *randomAsset = fetchResult[randomIndex];
+        if (randomAsset) {
+            PHImageRequestOptions *requestOptions = [[PHImageRequestOptions alloc] init];
+            requestOptions.synchronous = YES;
+            requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+            [[PHImageManager defaultManager] requestImageDataForAsset:randomAsset options:requestOptions resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+                randomImage = [UIImage imageWithData:imageData];
+            }];
+        }
+    }
+    return randomImage;
+}
+
++ (BOOL)removeImageWithImageName:(NSString *)photoName
+{
+    NSString *photoPath = [ImageSaveDirectory stringByAppendingPathComponent:photoName];
+    BOOL flag;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:photoPath]) {
+        NSError *error;
+        flag = [[NSFileManager defaultManager] removeItemAtPath:photoPath error:&error];
+    };
+    return flag;
+    
+}
+- (BOOL)writeImageToDocumentDirectoryWithPhotoName:(NSString *)photoName
+{
+    NSString *photoPath = [ImageSaveDirectory stringByAppendingPathComponent:photoName];
+    
+    NSData *imageData = UIImageJPEGRepresentation(self, 1.0);
+    NSError *error;
+    return [imageData writeToFile:photoPath options:NSDataWritingAtomic error:&error];
+
+}
++(instancetype)imageForPhotoName:(NSString *)photoName
+{
+    NSString *photoPath = [ImageSaveDirectory stringByAppendingPathComponent:photoName];
+    return [UIImage imageWithContentsOfFile:photoPath];
+}
+
++(instancetype)imageDrawInView:(UIView *)view Inrect:(CGRect)rect
+{
+
+     UIGraphicsBeginImageContextWithOptions(view.bounds.size, YES, 0);   //先截取大图
+     [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+     __autoreleasing UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+     UIGraphicsEndImageContext();
+    
+    UIImage *img = [UIImage crop:viewImage InRect:rect];
+    
+    return img;
+}
+
++ (UIImage*) maskImage:(UIImage *)image withMask:(UIImage *)maskImage
+{
+    //image是被剪裁的图片，maskImage是需要剪裁的形状
+    
+    CGImageRef maskRef = maskImage.CGImage;
+    
+    CGImageRef mask = CGImageMaskCreate(CGImageGetWidth(maskRef),
+                                        CGImageGetHeight(maskRef),
+                                        CGImageGetBitsPerComponent(maskRef),
+                                        CGImageGetBitsPerPixel(maskRef),
+                                        CGImageGetBytesPerRow(maskRef),
+                                        CGImageGetDataProvider(maskRef), NULL, false);
+    CGImageRef masked = CGImageCreateWithMask([image CGImage], mask);
+    return [UIImage imageWithCGImage:masked];
+    
+}
+
+
+- (UIImage *)fixOrientation
+{
+    // No-op if the orientation is already correct
+    if (self.imageOrientation == UIImageOrientationUp) return self;
+    
+    // We need to calculate the proper transformation to make the image upright.
+    // We do it in 2 steps: Rotate if Left/Right/Down, and then flip if Mirrored.
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    
+    switch (self.imageOrientation) {
+        case UIImageOrientationDown:
+        case UIImageOrientationDownMirrored:
+            transform = CGAffineTransformTranslate(transform, self.size.width, self.size.height);
+            transform = CGAffineTransformRotate(transform, M_PI);
+            break;
+            
+        case UIImageOrientationLeft:
+        case UIImageOrientationLeftMirrored:
+            transform = CGAffineTransformTranslate(transform, self.size.width, 0);
+            transform = CGAffineTransformRotate(transform, M_PI_2);
+            break;
+            
+        case UIImageOrientationRight:
+        case UIImageOrientationRightMirrored:
+            transform = CGAffineTransformTranslate(transform, 0, self.size.height);
+            transform = CGAffineTransformRotate(transform, -M_PI_2);
+            break;
+        case UIImageOrientationUp:
+        case UIImageOrientationUpMirrored:
+            break;
+    }
+    
+    switch (self.imageOrientation) {
+        case UIImageOrientationUpMirrored:
+        case UIImageOrientationDownMirrored:
+            transform = CGAffineTransformTranslate(transform, self.size.width, 0);
+            transform = CGAffineTransformScale(transform, -1, 1);
+            break;
+            
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationRightMirrored:
+            transform = CGAffineTransformTranslate(transform, self.size.height, 0);
+            transform = CGAffineTransformScale(transform, -1, 1);
+            break;
+        case UIImageOrientationUp:
+        case UIImageOrientationDown:
+        case UIImageOrientationLeft:
+        case UIImageOrientationRight:
+            break;
+    }
+    
+    // Now we draw the underlying CGImage into a new context, applying the transform
+    // calculated above.
+    CGContextRef ctx = CGBitmapContextCreate(NULL, self.size.width, self.size.height,
+                                             CGImageGetBitsPerComponent(self.CGImage), 0,
+                                             CGImageGetColorSpace(self.CGImage),
+                                             CGImageGetBitmapInfo(self.CGImage));
+    CGContextConcatCTM(ctx, transform);
+    switch (self.imageOrientation) {
+        case UIImageOrientationLeft:
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationRight:
+        case UIImageOrientationRightMirrored:
+            // Grr...
+            CGContextDrawImage(ctx, CGRectMake(0,0,self.size.height,self.size.width), self.CGImage);
+            break;
+            
+        default:
+            CGContextDrawImage(ctx, CGRectMake(0,0,self.size.width,self.size.height), self.CGImage);
+            break;
+    }
+    
+    // And now we just create a new UIImage from the drawing context
+    CGImageRef cgimg = CGBitmapContextCreateImage(ctx);
+    UIImage *img = [UIImage imageWithCGImage:cgimg];
+    CGContextRelease(ctx);
+    CGImageRelease(cgimg);
+    return img;
+}
+
++(instancetype)imageWithColor:(UIColor*) color withRect:(CGRect)rect
+{
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    __autoreleasing UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return theImage;
+}
+
 
 @end

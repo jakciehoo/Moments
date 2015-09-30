@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HooTextView.h"
 
+@class HooTextView;
 @interface HooTextViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet HooTextView *textView;
-
+@property (copy, nonatomic) NSString *text;
 @end

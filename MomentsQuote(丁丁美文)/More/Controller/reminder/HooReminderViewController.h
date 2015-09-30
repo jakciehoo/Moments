@@ -8,15 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol HooReminderViewControllerDelegate <NSObject>
 
-@optional
-- (void)datePick:(UIDatePicker *)picker pickeDate:(NSString *)date;
-
-@end
 
 @interface HooReminderViewController : UIViewController
 
-@property (nonatomic, weak) id<HooReminderViewControllerDelegate> delegate;
 
 @end

@@ -10,6 +10,6 @@
 
 @interface HooJSONTool : NSObject
 
-+ (void)saveMoments;
++ (BOOL)saveMoments;
 
 @end

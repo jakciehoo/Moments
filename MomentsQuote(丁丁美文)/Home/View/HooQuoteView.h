@@ -27,6 +27,10 @@
  *  美文背景颜色
  */
 @property (nonatomic, strong) UIColor *quoteBgColor;
+/**
+ *  是否显示文字
+ */
+@property (nonatomic, assign,getter=isShowQuote) BOOL showQuote;
 
 
 /**

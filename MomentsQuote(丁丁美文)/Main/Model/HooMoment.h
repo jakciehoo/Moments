@@ -45,7 +45,10 @@
 @class HooPhoto;
 
 @interface HooMoment : NSObject
-
+/**
+ *  美图美文的在数据库中的ID编号
+ */
+@property (nonatomic, assign) NSInteger ID;
 /**
  *  美文的正文
  */
@@ -81,16 +84,15 @@
 @property (nonatomic, strong) HooPhoto *photo;
 
 /**
- *  美图美文是否为个人创作
+ *  在首页中的显示日期 格式：MM-DD
  */
-@property (nonatomic, assign) BOOL  isMine;
-
+@property (nonatomic, copy) NSString *show_date;
 /**
- *  美图美文创建日期
+ *  美图美文创建日期 距离1970年的间隔秒数 格式：1363503600
  */
 @property (nonatomic, copy) NSString *created_date;
 /**
- *  美图美文最后修改日期
+ *  美图美文最后修改日期 距离1970年的间隔秒数 格式：1391603859
  */
 @property (nonatomic, copy) NSString *modified_date;
 

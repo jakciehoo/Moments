@@ -7,8 +7,6 @@
 //
 
 #import "HooMainNavigationController.h"
-#import "HooMainTabBarController.h"
-#import "HooTabBar.h"
 
 @interface HooMainNavigationController ()
 
@@ -31,10 +29,8 @@
 {
 
     [super pushViewController:viewController animated:animated];
-    if (self.viewControllers.count > 1) {
         
-        viewController.hidesBottomBarWhenPushed = YES;
-    }
+    viewController.hidesBottomBarWhenPushed = YES;
 }
 
 

@@ -7,13 +7,17 @@
 //
 
 #import "HooQuoteView.h"
-#import "HooInsetsLabel.h"
+#import "HooLabel.h"
 #import "HooMoment.h"
 #import "HooPhoto.h"
+#import <CoreText/CoreText.h>
 
-@interface HooQuoteView ()<UIGestureRecognizerDelegate>
-@property (weak, nonatomic) IBOutlet HooInsetsLabel *quoteTextLabel;
-@property (weak, nonatomic) IBOutlet HooInsetsLabel *quoteAuthorLabel;
+@interface HooQuoteView ()<UIGestureRecognizerDelegate>{
+
+ CTFrameRef _ctFrame;
+}
+@property (weak, nonatomic) IBOutlet HooLabel *quoteTextLabel;
+@property (weak, nonatomic) IBOutlet HooLabel *quoteAuthorLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *quoteImageView;
 /**
  *  美文字体大小
@@ -62,19 +66,20 @@
 - (void)setQuoteAuthor:(NSString *)quoteAuthor
 {
     _quoteAuthor = quoteAuthor;
-
-    
     self.quoteAuthorLabel.text = quoteAuthor;
-    [self.quoteAuthorLabel sizeToFit];
-    [self.quoteTextLabel sizeToFit];
+
 }
 
 - (void)setQuoteText:(NSString *)quoteText
 {
     _quoteText = quoteText;
     self.quoteTextLabel.text = quoteText;
-    self.quoteTextLabel.adjustsFontSizeToFitWidth = YES;
-    self.quoteAuthorLabel.adjustsFontSizeToFitWidth = YES;
+
+}
+- (void)setShowBg:(BOOL)showBg
+{
+    _showBg = showBg;
+    [self showOrHideQuoteBackgroudColor];
 }
 
 - (void)setQuoteColor:(UIColor *)quoteColor
@@ -82,8 +87,7 @@
     _quoteColor = quoteColor;
     self.quoteAuthorLabel.textColor = quoteColor;
     self.quoteTextLabel.textColor = quoteColor;
-    self.quoteTextLabel.adjustsFontSizeToFitWidth = YES;
-    self.quoteAuthorLabel.adjustsFontSizeToFitWidth = YES;
+    self.quoteTextLabel.highlightedTextColor = [UIColor redColor];
 }
 
 - (void)setQuoteFontName:(NSString *)quoteFontName
@@ -91,32 +95,45 @@
     _quoteFontName = quoteFontName;
     self.quoteTextLabel.font = [UIFont fontWithName:quoteFontName size:17.0];
     self.quoteAuthorLabel.font = [UIFont fontWithName:quoteFontName size:12.0];
-    self.quoteTextLabel.adjustsFontSizeToFitWidth = YES;
-    self.quoteAuthorLabel.adjustsFontSizeToFitWidth = YES;
 
 }
-- (void)setShowBg:(BOOL)showBg
+- (void)setShowQuote:(BOOL)showQuote
 {
-    _showBg = showBg;
+    _showQuote = showQuote;
+    self.quoteAuthorLabel.alpha = showQuote ? 1.0 : 0.0;
+    self.quoteTextLabel.alpha = showQuote ? 1.0 : 0.0;
+}
+- (void)setQuoteBgColor:(UIColor *)quoteBgColor
+{
+    _quoteBgColor = quoteBgColor;
+    [self showOrHideQuoteBackgroudColor];
+
+}
+- (void)showOrHideQuoteBackgroudColor
+{
     //给文字添加背景色
-    if (_showBg) {
+    if (self.showBg) {
         self.quoteImageView.hidden = YES;
-        NSDictionary *attr = @{NSBackgroundColorAttributeName :self.quoteBgColor};
-        
-        //        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        //        paragraphStyle.lineSpacing = 8;
-        //        paragraphStyle.lineBreakMode = NSLineBreakByCharWrapping;
-        //        [attributeString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, self.quoteText.length)];
-        
-        
-        
-        self.quoteTextLabel.attributedText = [[NSAttributedString alloc] initWithString:self.quoteTextLabel.text attributes:attr];
-        self.quoteAuthorLabel.attributedText = [[NSAttributedString alloc] initWithString:self.quoteAuthorLabel.text attributes:attr];
+        if (self.quoteBgColor) {
+            
+            NSDictionary *attr = @{NSBackgroundColorAttributeName :self.quoteBgColor};
+            if (self.quoteTextLabel.text.length > 0) {
+                self.quoteTextLabel.attributedText = [[NSAttributedString alloc] initWithString:self.quoteTextLabel.text attributes:attr];
+            }
+            if (self.quoteAuthorLabel.text.length > 0) {
+                self.quoteAuthorLabel.attributedText = [[NSAttributedString alloc] initWithString:self.quoteAuthorLabel.text attributes:attr];
+            }
+        }
     }else{
-        self.quoteAuthorLabel.text = self.quoteAuthorLabel.text;
-        self.quoteTextLabel.text = self.quoteTextLabel.text;
+        if (self.quoteTextLabel.text.length > 0) {
+            self.quoteTextLabel.attributedText = [[NSAttributedString alloc] initWithString:self.quoteTextLabel.text];
+        }
+        if (self.quoteAuthorLabel.text.length > 0) {
+            self.quoteAuthorLabel.attributedText = [[NSAttributedString alloc] initWithString:self.quoteAuthorLabel.text];
+        }
         self.quoteImageView.hidden = NO;
     }
+
 }
 
 
@@ -128,7 +145,9 @@
 }
 
 - (void)awakeFromNib
-{   //不需要autoResizing,否则自动缩放
+{
+    
+    //不需要autoResizing,否则自动缩放
     self.autoresizingMask = UIViewAutoresizingNone;
     //添加了四中手势,tap,pan,rotation,pinch
     [self addGestureRecognizersToPiece:self];
@@ -223,12 +242,13 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    self.quoteTextLabel.adjustsFontSizeToFitWidth = YES;
-    self.quoteAuthorLabel.adjustsFontSizeToFitWidth = YES;
-    self.height = self.quoteAuthorLabel.height + self.quoteTextLabel.height + 20;
+    self.height = self.quoteAuthorLabel.height + self.quoteTextLabel.height + 5;
     self.quoteAuthorLabel.width = self.quoteTextLabel.width;
     self.width = self.quoteTextLabel.width;
     
 }
+
+
+
 
 @end

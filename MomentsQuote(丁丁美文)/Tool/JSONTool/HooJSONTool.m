@@ -15,8 +15,9 @@
 
 static NSArray *_moments;
 
-+ (void)saveMoments
++ (BOOL)saveMoments
 {
+    BOOL flag;
     if (_moments == nil) {
         //从program.json 将数据转化成数组
         NSURL *fileURL = [[NSBundle mainBundle] URLForResource:@"program.json" withExtension:nil];
@@ -29,10 +30,15 @@ static NSArray *_moments;
         
         //保存数据到数据库
         for (HooMoment *moment in moments) {
-            
-            [HooSqlliteTool addNewMoment:moment];
+            moment.fontColorR = 1.0;
+            moment.fontColorG = 1.0;
+            moment.fontColorB = 1.0;
+            moment.fontSize = 17.0;
+            moment.fontName = @"Avenir-HeavyOblique";
+            flag = [HooSqlliteTool addNewMoment:moment];
         }
     }
+    return flag;
 }
 
 @end

@@ -32,6 +32,10 @@
  */
 @property (nonatomic, copy) NSString *image_thumb_filename;
 /**
+ *  滤镜名称
+ */
+@property (nonatomic, copy) NSString *image_filtername;
+/**
  *  美图美文是否被收藏
  */
 @property (nonatomic, assign) BOOL  isFavorite;

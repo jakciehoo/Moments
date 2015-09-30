@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+@class HooMoment;
 
 @interface HooPosterCell : UITableViewCell
-+ (instancetype)cellWithTableView:(UITableView *)tableView;
+
+@property (nonatomic,strong) HooMoment *myMoment;
+
 
 
 @end

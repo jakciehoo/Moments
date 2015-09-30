@@ -26,13 +26,29 @@
 + (void)setBool:(BOOL)value forKey:(NSString *)defaultName
 {
     [[NSUserDefaults standardUserDefaults] setBool:value forKey:defaultName];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+
 }
 
 + (BOOL)boolForkey:(NSString *)defaultName
 {
     return  [[NSUserDefaults standardUserDefaults] boolForKey:defaultName];
 }
+
+
+
++ (void)setInteger:(NSInteger)value forKey:(NSString *)defaultName
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:value forKey:defaultName];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSInteger)integerForkey:(NSString *)defaultName
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:defaultName];
+}
+
+
+
 
 
 

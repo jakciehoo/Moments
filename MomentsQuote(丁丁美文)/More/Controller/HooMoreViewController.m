@@ -9,21 +9,18 @@
 #import "HooMoreViewController.h"
 #import "HooSettingArrowItem.h"
 #import "HooSettingGroup.h"
-#import "HooSettingItem.h"
-#import "HooSettingSwitchItem.h"
-#import "HooSettingCell.h"
 #import "HooReminderViewController.h"
 #import "HooSaveTools.h"
 #import "HooAuthorWeiboViewController.h"
+#import "HooShareTool.h"
 
 
 
 
-@interface HooMoreViewController ()<HooReminderViewControllerDelegate,MFMessageComposeViewControllerDelegate,MFMailComposeViewControllerDelegate>
+@interface HooMoreViewController ()<MFMessageComposeViewControllerDelegate,MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, strong) HooSettingArrowItem *reminder;
 
-@property (nonatomic, weak) UITableViewCell *reminderCell;
 
 @end
 
@@ -42,24 +39,30 @@
     //组3
     [self addGroup3];
 
-    
 }
-- (void)addGroup0
+- (void)viewWillAppear:(BOOL)animated
 {
-    
-    
-    _reminder = [HooSettingArrowItem itemWithIcon:nil title:@"提醒我" destVcClass:[HooReminderViewController class]];
     NSString *dateStr = [HooSaveTools objectForKey:DatePicked];
     BOOL reminderState = [HooSaveTools boolForkey:SwitchState];
     if (reminderState) {
         if (dateStr.length > 0) {
             _reminder.subtitle = dateStr;
         }else{
-            _reminder.subtitle = @"off";
+            _reminder.subtitle = @"关闭";
         }
     }else{
-        _reminder.subtitle = @"off";
+        _reminder.subtitle = @"关闭";
     }
+    //刷新第一行
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+
+}
+- (void)addGroup0
+{
+    
+    
+    _reminder = [HooSettingArrowItem itemWithIcon:nil title:@"提醒我" destVcClass:[HooReminderViewController class]];
 
     
 
@@ -107,7 +110,8 @@
     
     HooSettingArrowItem *recomend = [HooSettingArrowItem itemWithIcon:nil title:@"推荐给朋友" destVcClass:nil];
     recomend.option = ^{
-
+        //分享程序
+        [HooShareTool showshareAlertControllerIn:self.view WithImage:[UIImage imageNamed:@"lib_intro1.5"] andFileName:@"MomentLife.png"];
     };
 
     
@@ -132,7 +136,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:true];
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     HooSettingGroup *group = self.dataList[indexPath.section];
     HooSettingItem *item = group.items[indexPath.row];
     
@@ -144,11 +147,6 @@
         HooSettingArrowItem *arrowItem = (HooSettingArrowItem *)item;
         if (arrowItem.destVcClass) {
             UITableViewController *vc = [[arrowItem.destVcClass alloc] init];
-            if (arrowItem == _reminder) {
-                HooReminderViewController *reminder = (HooReminderViewController *)vc;
-                self.reminderCell = cell;
-                reminder.delegate = self;
-            }
             vc.title = item.title;
             [self.navigationController pushViewController:vc animated:true];
             
@@ -157,17 +155,7 @@
     }
     
 }
-#pragma mark - HooReminderViewControllerDelegate代理
-- (void)datePick:(UIDatePicker *)picker pickeDate:(NSString *)date
-{
-    
-    _reminder.subtitle = date;
-    if (self.reminderCell) {
-        
-        self.reminderCell.detailTextLabel.text = date;
-    }
-    
-}
+
 
 #pragma MFMessageComposeViewControllerDelegate 实现信息发送完成返回原应用
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result

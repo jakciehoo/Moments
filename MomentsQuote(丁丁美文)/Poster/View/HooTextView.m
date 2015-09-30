@@ -49,11 +49,28 @@
 - (void)textChange
 {
     if (self.text.length) {
+        [self caculateNewBounds];
         self.placeHolderLabel.hidden = YES;
     }else{
         self.placeHolderLabel.hidden = NO;
         
     }
+}
+- (void)setText:(NSString *)text
+{
+    if (text.length) {
+        [super setText:text];
+        [self textChange];
+    }
+}
+- (void)caculateNewBounds
+{
+    CGRect bounds = self.bounds;
+    // 计算 text view 的高度
+    CGSize maxSize = CGSizeMake(bounds.size.width, CGFLOAT_MAX);
+    CGSize newSize = [self sizeThatFits:maxSize];
+    bounds.size.height = newSize.height;
+    self.bounds = bounds;
 }
 
 

@@ -102,5 +102,13 @@
     
     
 }
+- (void)dealloc
+{
+    [self removeObserver:self forKeyPath:@"title"];
+    [self removeObserver:self forKeyPath:@"image"];
+    [self removeObserver:self forKeyPath:@"selectedImage"];
+    [self removeObserver:self forKeyPath:@"badgeValue"];
+
+}
 
 @end

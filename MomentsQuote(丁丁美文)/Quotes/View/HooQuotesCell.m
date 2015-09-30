@@ -9,12 +9,12 @@
 #import "HooQuotesCell.h"
 #import "HooMoment.h"
 #import "HooPhoto.h"
-#import "HooInsetsLabel.h"
+#import "HooLabel.h"
 #import "HooSqlliteTool.h"
 
 @interface HooQuotesCell ()
 @property (weak, nonatomic) IBOutlet UIImageView *cellImageView;
-@property (weak, nonatomic) IBOutlet HooInsetsLabel *cellQuotesLabel;
+@property (weak, nonatomic) IBOutlet HooLabel *cellQuotesLabel;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
 @property (weak, nonatomic) IBOutlet UIButton *starButton;
 
@@ -28,7 +28,15 @@
 
     
     NSString *imageName = moment.photo.image_thumb_filename;
-    self.cellImageView.image = [UIImage imageNamed:imageName];
+    UIImage *momentImage;
+    if (imageName == nil) {
+        momentImage = [UIImage imageNamed:@"gridempty"];
+    }else{
+        momentImage = [UIImage imageNamed:imageName];
+    }
+    
+    self.cellImageView.image = momentImage;
+    
     self.cellQuotesLabel.text = moment.quote;
     if (moment.photo.isFavorite == YES) {
         self.starButton.selected = YES;

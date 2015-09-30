@@ -8,9 +8,9 @@
 
 #import "HooMainTabBarController.h"
 #import "HooHomeViewController.h"
-#import "HooPosterViewController.h"
+#import "HooMyPostersController.h"
 #import "HooQuotesViewController.h"
-#import "HooMomentsViewController.h"
+#import "HooMyPrintPostersController.h"
 #import "HooMoreViewController.h"
 #import "HooMainNavigationController.h"
 #import "HooTabBar.h"
@@ -18,7 +18,7 @@
 
 @interface HooMainTabBarController ()<HooTabBarDelegate,UINavigationControllerDelegate>
 {
-    BOOL tabBarIsShow;
+    BOOL _tabBarIsShow;
 }
 
 @property (nonatomic, strong) NSMutableArray *items;
@@ -72,30 +72,16 @@
     
     [self.tabBar removeFromSuperview];
     
-    
-}
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
     self.selectedIndex = 2;
-
+        [NSTimer scheduledTimerWithTimeInterval:HooDuration * 5 target:self selector:@selector(hideTabBar) userInfo:nil repeats:NO];
 }
-
-- (void)showOrHideTabBar
+- (void)hideTabBar
 {
-    if (self.hooTabBar.centerButton.currentState == HooFlowerButtonsStateOpened) {
+    if (self.selectedIndex == 2) {
+        
         [self.view removeConstraint:_tabBarbottomConstraint];
         
         _tabBarbottomConstraint = [self.hooTabBar autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:-50];
-        [UIView animateWithDuration:1.0 animations:^{
-            
-            [self.view layoutIfNeeded];
-            
-        }];
-    }else{
-        [self.view removeConstraint:_tabBarbottomConstraint];
-        
-        _tabBarbottomConstraint = [self.hooTabBar autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:0];
         [UIView animateWithDuration:1.0 animations:^{
             
             [self.view layoutIfNeeded];
@@ -105,15 +91,39 @@
 
 }
 
+//隐藏或显示自定义tabbar的动画
+- (void)showOrHideTabBar
+{
+    if (self.hooTabBar.centerButton.currentState == HooFlowerButtonsStateOpened) {
+        [self.view removeConstraint:_tabBarbottomConstraint];
+        
+        _tabBarbottomConstraint = [self.hooTabBar autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:-50];
+        [UIView animateWithDuration:HooDuration/2 animations:^{
+            
+            [self.view layoutIfNeeded];
+            
+        }];
+    }else{
+        [self.view removeConstraint:_tabBarbottomConstraint];
+        
+        _tabBarbottomConstraint = [self.hooTabBar autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:0];
+        [UIView animateWithDuration:HooDuration/2 animations:^{
+            
+            [self.view layoutIfNeeded];
+            
+        }];
+    }
+}
+
 #pragma mark - 添加子控制器
 - (void)setupAllChildViewController
 {
     //创作海报
-    HooPosterViewController *poster = [[HooPosterViewController alloc] init];
-    [self addChildVc:poster withImageName:@"tb_poster_flat" title:@"创作"];
+    HooMyPostersController *poster = [[HooMyPostersController alloc] init];
+    [self addChildVc:poster withImageName:@"tb_edit_flat" title:@"丁丁记"];
     
     HooQuotesViewController *quotes = [[HooQuotesViewController alloc] init];
-    [self addChildVc:quotes withImageName:@"tb_grid_flat" title:@"丁丁美文"];
+    [self addChildVc:quotes withImageName:@"tb_grid_flat" title:@"发现"];
     
     HooHomeViewController *home = [[HooHomeViewController alloc] init];
     [self addChildVc:home withImageName:nil title:nil];
@@ -121,8 +131,8 @@
     
     
     
-    HooMomentsViewController *Moments = [[HooMomentsViewController alloc] init];
-    [self addChildVc:Moments withImageName:@"tb_talk_flat" title:@"美图"];
+    HooMyPrintPostersController *print = [[HooMyPrintPostersController alloc] init];
+    [self addChildVc:print withImageName:@"tb_poster_flat" title:@"丁丁印"];
     
     HooMoreViewController *profile = [[HooMoreViewController alloc] init];
     [self addChildVc:profile withImageName:@"tb_more_flat" title:@"更多"];
@@ -142,7 +152,7 @@
     
     [self.items addObject:childVc.tabBarItem];
     
-    HooMainNavigationController *navi = [[HooMainNavigationController alloc] initWithRootViewController:childVc];
+    UINavigationController *navi = [[HooMainNavigationController alloc] initWithRootViewController:childVc];
     navi.delegate = self;
     [self addChildViewController:navi];
 }
@@ -159,25 +169,24 @@
 
 - (void)navigationController:(UINavigationController *)navController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-    if (viewController.hidesBottomBarWhenPushed)
+    if (navController.viewControllers.count > 1)
     {   //隐藏，向左移动
-        if (!tabBarIsShow) return;
+        if (!_tabBarIsShow) return;
 
          [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                                         self.hooTabBar.transform = CGAffineTransformMakeTranslation(-self.hooTabBar.width * 2, 0);
-        } completion:^(BOOL finished) {
-            tabBarIsShow = NO;
-        }];
-    }
-    else
-    {
+                                        } completion:^(BOOL finished) {
+                                            _tabBarIsShow = NO;
+                                        }];
+        
+    }else{
         //显示，向右还原
-        if (tabBarIsShow) return;
+        if (_tabBarIsShow) return;
         [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
                              self.hooTabBar.transform = CGAffineTransformIdentity;
                          } completion:^(BOOL finished) {
-                             tabBarIsShow = YES;
+                             _tabBarIsShow = YES;
                          }];
     }
     

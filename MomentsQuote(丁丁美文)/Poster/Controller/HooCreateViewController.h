@@ -8,6 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@class HooMoment;
 @interface HooCreateViewController : UITableViewController
+/**
+ *  美文美图数据模型
+ */
+@property (nonatomic,strong) HooMoment *moment;
+/**
+ *  是否来自自动创建
+ */
+@property (nonatomic,assign,getter=isFromAuto) BOOL fromAuto;
+/**
+ *  是否来自己编辑
+ */
+@property (nonatomic,assign,getter=isFromEdit) BOOL fromEdit;
 
 @end

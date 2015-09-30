@@ -9,10 +9,30 @@
 #import "NSDate+Extension.h"
 
 @implementation NSDate (Extension)
-+(NSString *)intervalStringFromDate:(NSDate *)date
+- (NSString *)convertDateTointervalString
 {
-    NSTimeInterval interval = [date timeIntervalSince1970];
+    NSTimeInterval interval = [self timeIntervalSince1970];
     return [NSString stringWithFormat:@"%d",(int)interval];
+}
+
++ (NSString *)readableTimeFromIntervalString:(NSString *)intervalString
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    [formatter setDateFormat:@"YYYY-MM-dd HH:mm"];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)[intervalString intValue]];
+    NSString*readableTime = [formatter stringFromDate:date];
+    return readableTime;
+}
+
+
+- (NSString *)dateWithMMDDAndConvertToString
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MM月dd"];
+    NSString *strDate = [dateFormatter stringFromDate:self];
+    return strDate;
 }
 
 @end

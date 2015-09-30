@@ -12,10 +12,10 @@
 
 @interface HooReminderViewController ()
 @property (weak, nonatomic) IBOutlet UIDatePicker *dataPicker;
-@property (weak, nonatomic) IBOutlet UISwitch *reminderSwitch;
-@property (weak, nonatomic) IBOutlet UILabel *reminderLabel;
 
-@property (nonatomic, strong) NSDate *dueDate;
+@property (weak, nonatomic) IBOutlet UISwitch *reminderSwitch;
+
+@property (weak, nonatomic) IBOutlet UILabel *reminderLabel;
 
 @property (nonatomic, strong) NSDateFormatter *formatter;
 
@@ -35,17 +35,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"提醒我";
     // Do any additional setup after loading the view from its nib.
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     
     //从沙盒中取值，并判断是否存在
     BOOL reminderSwithState = [HooSaveTools boolForkey:SwitchState];
-    if (reminderSwithState) {
-        self.dataPicker.alpha = 1.0;
-        self.reminderLabel.alpha = 1.0;
-    }else{
-        self.dataPicker.alpha = 0.0;
-        self.reminderLabel.alpha = 0.0;
-    }
+    
+    CGFloat alphaValue = reminderSwithState ? 1.0 : 0.0;
+    self.dataPicker.alpha = alphaValue;
+    self.reminderLabel.alpha = alphaValue;
     
     self.reminderSwitch.on = reminderSwithState;
 
@@ -67,21 +66,12 @@
 
 - (void)dateChanged:(UIDatePicker *)picker
 {
-    self.dueDate = picker.date;
+    //先删除通知
+    [self cancelNotification];
     
-    NSString *dateStr = [self.formatter stringFromDate:self.dueDate];
-    HooLog(@"%@",dateStr);
-    NSDate *date = [self.formatter dateFromString:dateStr];
-    NSLog(@"%@",date);
-    NSString *alertBody = @"丁丁美文有新的美文啦，请打开查看，希望能让你喜欢";
     //发起通知
-    [self scheduleNotification:date alertBody:alertBody];
-    // 保存到沙盒
-    [HooSaveTools setObject:dateStr forKey:DatePicked];
-    //通知代理
-    if ([self.delegate respondsToSelector:@selector(datePick:pickeDate:)]) {
-        [self.delegate datePick:picker pickeDate:dateStr];
-    }
+    [self scheduleNotification:picker.date];
+    
     
     
     
@@ -100,6 +90,8 @@
         [UIView animateWithDuration:0.5 animations:^{
             self.dataPicker.alpha = 1.0;
             self.reminderLabel.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            [self scheduleNotification:self.dataPicker.date];
         }];
     }else{
         //隐藏控件
@@ -118,17 +110,26 @@
 }
 
 //发起通知
-- (void)scheduleNotification:(NSDate *)dueDate alertBody:(NSString *)alertBody
+- (void)scheduleNotification:(NSDate *)dueDate
 {
+    
+    NSString *dateStr = [self.formatter stringFromDate:dueDate];
+    
+    // 保存到沙盒
+    [HooSaveTools setObject:dateStr forKey:DatePicked];
+    
+    NSDate *date = [self.formatter dateFromString:dateStr];
+    NSString *alertBody = @"丁丁美文有新的美文啦，请打开查看，希望能让你喜欢";
     //先删除之前定义过的通知
     [self cancelNotification];
     //再发起新的通知
 
         UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-        localNotification.fireDate = dueDate;
+        localNotification.fireDate = date;
         localNotification.repeatInterval = NSCalendarUnitDay;
         localNotification.timeZone = [NSTimeZone defaultTimeZone];
         localNotification.alertBody = alertBody;
+        localNotification.alertAction = @"查看";
         localNotification.userInfo = @{@"reminderNotification":@"reminderNotification"};
         localNotification.soundName = UILocalNotificationDefaultSoundName;
         [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];

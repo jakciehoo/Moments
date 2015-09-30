@@ -5,7 +5,6 @@
 //  Created by HooJackie on 15/8/3.
 //  Copyright (c) 2015年 jackieHoo. All rights reserved.
 //
-
 #import "AppDelegate.h"
 #import "HooMainTabBarController.h"
 #import <ShareSDK/ShareSDK.h>
@@ -25,11 +24,6 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
-    
-    
-    [ShareSDK registerApp:@"6dbc8a22f2a4"];
-    [self initializePlat];
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     
@@ -38,6 +32,9 @@
     [self.window makeKeyAndVisible];
     
 
+    
+    //ShareSDK社会化分享功能
+    [self initializePlat];
     
     return YES;
 }
@@ -64,6 +61,7 @@
 
 - (void)initializePlat
 {
+    [ShareSDK registerApp:@"6d8f1cc422a8"];
     /**
      连接新浪微博开放平台应用以使用相关功能，此应用需要引用SinaWeiboConnection.framework
      http://open.weibo.com上注册新浪微博开放平台应用，并将相关信息填写到以下字段

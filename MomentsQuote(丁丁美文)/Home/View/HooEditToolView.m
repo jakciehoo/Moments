@@ -90,7 +90,7 @@
 - (NSArray *)filters
 {
     if (_filters== nil) {
-        _filters = @[@"CIColorPosterize",@"CIVibrance",@"CIGammaAdjust",@"CIExposureAdjust",@"CISepiaTone",@"CISRGBToneCurveToLinear",@"CILinearToSRGBToneCurve",@"CIPhotoEffectChrome", @"CIPhotoEffectFade", @"CIPhotoEffectInstant", @"CIColorInvert",@"CIPhotoEffectNoir", @"CIPhotoEffectMono", @"CIPhotoEffectProcess", @"CIPhotoEffectTransfer", @"CIVignetteEffect",@"CIGloom",@"CIGaussianBlur"];
+        _filters = @[@"Default",@"CIColorPosterize",@"CIExposureAdjust",@"CISepiaTone",@"CISRGBToneCurveToLinear",@"CILinearToSRGBToneCurve",@"CIPhotoEffectChrome", @"CIPhotoEffectFade", @"CIPhotoEffectInstant", @"CIColorInvert",@"CIPhotoEffectNoir", @"CIPhotoEffectMono", @"CIPhotoEffectProcess", @"CIPhotoEffectTransfer",@"CIGloom",@"CIGaussianBlur"];
         
     }
     return _filters;
@@ -98,7 +98,7 @@
 - (NSArray *)filterNames
 {
     if (_filterNames == nil) {
-        _filterNames = @[@"Posterize",@"Vibrance",@"Camma",@"Exposure",@"Sepia",@"Linear",@"SRGBTone",@"Chrome", @"Fade", @"Instant",@"Invert",@"Noir", @"Mono", @"Process", @"Transfer", @"Vignette",@"Gloom",@"Gaussian"];
+        _filterNames = @[@"Default",@"Posterize",@"Exposure",@"Sepia",@"Linear",@"SRGBTone",@"Chrome", @"Fade", @"Instant",@"Invert",@"Noir", @"Mono", @"Process", @"Transfer",@"Gloom",@"Gaussian"];
     }
     return _filterNames;
 }
@@ -116,12 +116,16 @@
     _filterImage = [filterImage resize:CGSizeMake(35, 35)];
     _filterButtons = [NSMutableArray array];
     for (int i = 0; i < self.filters.count; i++) {
-        CIImage *inputCIImage = [[CIImage alloc] initWithImage:_filterImage];
-        CIFilter *filter = [CIFilter filterWithName:self.filters[i]];
-        [filter setDefaults];
-        [filter setValue:inputCIImage forKey:@"inputImage"];
-        CIImage *outputCIImage = [filter valueForKey:@"outputImage"];
-        UIImage *filteredImage = [UIImage imageWithCIImage:outputCIImage];
+        UIImage *filteredImage = self.filterImage;
+        if (i > 0) {
+            CIImage *inputCIImage = [[CIImage alloc] initWithImage:_filterImage];
+            CIFilter *filter = [CIFilter filterWithName:self.filters[i]];
+            [filter setDefaults];
+            [filter setValue:inputCIImage forKey:@"inputImage"];
+            CIImage *outputCIImage = [filter valueForKey:@"outputImage"];
+            filteredImage = [UIImage imageWithCIImage:outputCIImage];
+        }
+        
         UIButton *filterButton = [[UIButton alloc] initWithFrame:CGRectMake(45 * i, 0, 45, 45)];
         filterButton.tag = i + 400;
         
@@ -178,8 +182,8 @@
 #pragma mark - 单击按钮 弹出popoverView
 - (void)btnClicked:(UIButton *)button
 {
-    if ([self.delegate respondsToSelector:@selector(toolButtonClicked:)]) {
-        [self.delegate toolButtonClicked:button];
+    if ([self.delegate respondsToSelector:@selector(toolButtonClicked)]) {
+        [self.delegate toolButtonClicked];
         [UIView animateWithDuration:1.0 animations:^{
             
             [self.superview layoutIfNeeded];
@@ -199,6 +203,7 @@
             popView.has3DStyle = NO;
             popView.animation = CMPopTipAnimationPop;
             popView.dismissTapAnywhere = YES;
+            popView.preferredPointDirection = PointDirectionDown;
             [popView presentPointingAtView:button inView:self.superview animated:YES];
             
             if (button.tag == 101) {
