@@ -1,0 +1,14 @@
+//
+//  HooMoreViewController.h
+//  MomentsLife
+//
+//  Created by HooJackie on 15/8/3.
+//  Copyright (c) 2015年 jackieHoo. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "HooBaseTableViewController.h"
+
+@interface HooMoreViewController : HooBaseTableViewController
+
+@end

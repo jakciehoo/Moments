@@ -1,0 +1,18 @@
+//
+//  HooEditViewController.h
+//  MomentsLife
+//
+//  Created by HooJackie on 15/9/25.
+//  Copyright (c) 2015年 jackieHoo. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface HooEditViewController : UIViewController
+
+/**
+ *  设计打印用的图片
+ */
+@property (nonatomic, strong)UIImage *printImage;
+
+@end

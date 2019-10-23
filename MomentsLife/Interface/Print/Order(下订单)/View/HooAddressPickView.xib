@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="HooAddressPickView">
+            <rect key="frame" x="0.0" y="0.0" width="300" height="216"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mrq-54-9XY">
+                    <rect key="frame" x="0.0" y="20" width="300" height="196"/>
+                    <animations/>
+                </pickerView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="选择所在城市" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b2q-t8-eel">
+                    <rect key="frame" x="0.0" y="0.0" width="300" height="20"/>
+                    <animations/>
+                    <color key="backgroundColor" red="0.91764705879999997" green="0.31764705879999999" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="iyv-0Q-Qem"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <animations/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="Mrq-54-9XY" secondAttribute="bottom" id="2FT-WS-PrR"/>
+                <constraint firstItem="b2q-t8-eel" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8DK-k7-0Dz"/>
+                <constraint firstItem="b2q-t8-eel" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="9Cm-QI-lY7"/>
+                <constraint firstItem="Mrq-54-9XY" firstAttribute="top" secondItem="b2q-t8-eel" secondAttribute="bottom" id="I4g-ZR-5uO"/>
+                <constraint firstAttribute="trailing" secondItem="Mrq-54-9XY" secondAttribute="trailing" id="WMQ-eX-Uwt"/>
+                <constraint firstItem="Mrq-54-9XY" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="y0d-bs-5L2"/>
+                <constraint firstAttribute="trailing" secondItem="b2q-t8-eel" secondAttribute="trailing" id="zpn-G0-Lth"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="locatePicker" destination="Mrq-54-9XY" id="dja-UW-bZF"/>
+            </connections>
+            <point key="canvasLocation" x="458" y="371"/>
+        </view>
+    </objects>
+</document>

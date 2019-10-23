@@ -1,0 +1,6 @@
+framework module BmobPay {
+  umbrella header "BmobPay.h"
+
+  export *
+  module * { export * }
+}
